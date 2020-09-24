@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="OnionDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="PersonId" />
+          </Key>
+          <Property Name="PersonId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Lastname" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Phone" Type="varchar" MaxLength="10" />
+          <Property Name="IdentityCard" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="PersonAddress">
+          <Key>
+            <PropertyRef Name="AddressId" />
+          </Key>
+          <Property Name="AddressId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonId" Type="int" Nullable="false" />
+          <Property Name="AddressTypeId" Type="int" Nullable="false" />
+          <Property Name="MainStreet" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="SecondaryStreet" Type="varchar" MaxLength="255" />
+          <Property Name="Reference" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <Association Name="FK_PersonAddress_Person">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="PersonAddress" Type="Self.PersonAddress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonId" />
+            </Principal>
+            <Dependent Role="PersonAddress">
+              <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="OnionDbModelStoreContainer">
+          <EntitySet Name="Person" EntityType="Self.Person" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PersonAddress" EntityType="Self.PersonAddress" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_PersonAddress_Person" Association="Self.FK_PersonAddress_Person">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="PersonAddress" EntitySet="PersonAddress" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OnionDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="OnionDbContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Person" EntityType="OnionDbModel.Person" />
+          <EntitySet Name="PersonAddress" EntityType="OnionDbModel.PersonAddress" />
+          <AssociationSet Name="FK_PersonAddress_Person" Association="OnionDbModel.FK_PersonAddress_Person">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="PersonAddress" EntitySet="PersonAddress" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="PersonId" />
+          </Key>
+          <Property Name="PersonId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Lastname" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="IdentityCard" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PersonAddress" Relationship="OnionDbModel.FK_PersonAddress_Person" FromRole="Person" ToRole="PersonAddress" />
+        </EntityType>
+        <EntityType Name="PersonAddress">
+          <Key>
+            <PropertyRef Name="AddressId" />
+          </Key>
+          <Property Name="AddressId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonId" Type="Int32" Nullable="false" />
+          <Property Name="AddressTypeId" Type="Int32" Nullable="false" />
+          <Property Name="MainStreet" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="SecondaryStreet" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Reference" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Person" Relationship="OnionDbModel.FK_PersonAddress_Person" FromRole="PersonAddress" ToRole="Person" />
+        </EntityType>
+        <Association Name="FK_PersonAddress_Person">
+          <End Type="OnionDbModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="OnionDbModel.PersonAddress" Role="PersonAddress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonId" />
+            </Principal>
+            <Dependent Role="PersonAddress">
+              <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="OnionDbModelStoreContainer" CdmEntityContainer="OnionDbContext">
+          <EntitySetMapping Name="Person">
+            <EntityTypeMapping TypeName="OnionDbModel.Person">
+              <MappingFragment StoreEntitySet="Person">
+                <ScalarProperty Name="IdentityCard" ColumnName="IdentityCard" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Lastname" ColumnName="Lastname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PersonId" ColumnName="PersonId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PersonAddress">
+            <EntityTypeMapping TypeName="OnionDbModel.PersonAddress">
+              <MappingFragment StoreEntitySet="PersonAddress">
+                <ScalarProperty Name="Reference" ColumnName="Reference" />
+                <ScalarProperty Name="SecondaryStreet" ColumnName="SecondaryStreet" />
+                <ScalarProperty Name="MainStreet" ColumnName="MainStreet" />
+                <ScalarProperty Name="AddressTypeId" ColumnName="AddressTypeId" />
+                <ScalarProperty Name="PersonId" ColumnName="PersonId" />
+                <ScalarProperty Name="AddressId" ColumnName="AddressId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
